@@ -3,12 +3,31 @@ import './App.css';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
+import axios from 'axios';
+
 class App extends Component {
+
+    constructor() {
+        super();
+
+        this.state = { autores: [] }
+    }
+
+    componentWillMount() {
+        axios.get(`http://localhost:8080/api/autores`)
+            .then(resp => {
+                const autores = resp.data;
+                this.setState({ autores });
+            })
+            .catch(() => alert('Erro ao tentar carregar as informações dos autores!!!!'))
+    }
+
+
     render() {
         return (
             <div id="layout">
 
-                <a href="#menu" id="menuLink" class="menu-link">
+                <a href="#menu" id="menuLink" className="menu-link">
                     <span></span>
                 </a>
 
@@ -60,10 +79,16 @@ class App extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Alberto</td>
-                                        <td>alberto.souza@caelum.com.br</td>
-                                    </tr>
+                                    {
+                                        this.state.autores.map((autor) => {
+                                            return (
+                                                <tr key={autor.id}>
+                                                    <td>{autor.nome}</td>
+                                                    <td>{autor.email}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    }
                                 </tbody>
                             </table>
                         </div>
