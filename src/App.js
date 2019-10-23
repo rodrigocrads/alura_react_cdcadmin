@@ -12,7 +12,7 @@ class App extends Component {
     constructor() {
         super();
 
-        this.state = { 
+        this.state = {
             autores: [],
             form: {
                 nome: "",
@@ -34,12 +34,14 @@ class App extends Component {
     enviarDadosForm(ev) {
         ev.preventDefault();
 
-        const headers = {
-            'Content-TYpe': 'application/json'
-        };
+        const headers = { 'Content-TYpe': 'application/json' };
 
         axios.post(URL, this.state.form, headers)
-           .catch((err) => console.log(err));
+            .then((resp) => {
+                const autores = resp.data;
+                this.setState({ autores })
+            })
+            .catch((err) => console.log(err));
     }
 
 
@@ -75,23 +77,23 @@ class App extends Component {
                             <form className="pure-form pure-form-aligned" method="POST" onSubmit={(event) => this.enviarDadosForm(event)}>
                                 <div className="pure-control-group">
                                     <label htmlFor="nome">Nome</label>
-                                    <input id="nome" type="text" name="nome" 
-                                        value={form.nome} 
-                                        onChange={ (ev) => this.setState({form: {...form, nome: ev.target.value}}) }
+                                    <input id="nome" type="text" name="nome"
+                                        value={form.nome}
+                                        onChange={(ev) => this.setState({ form: { ...form, nome: ev.target.value } })}
                                     />
                                 </div>
                                 <div className="pure-control-group">
                                     <label htmlFor="email">Email</label>
                                     <input id="email" type="email" name="email"
-                                        value={form.email} 
-                                        onChange={ (ev) => this.setState({form: {...form, email: ev.target.value}}) } 
+                                        value={form.email}
+                                        onChange={(ev) => this.setState({ form: { ...form, email: ev.target.value } })}
                                     />
                                 </div>
                                 <div className="pure-control-group">
                                     <label htmlFor="senha">Senha</label>
-                                    <input id="senha" type="password" name="senha" 
+                                    <input id="senha" type="password" name="senha"
                                         value={form.senha}
-                                        onChange={ (ev) => this.setState({form: {...form, senha: ev.target.value}}) }
+                                        onChange={(ev) => this.setState({ form: { ...form, senha: ev.target.value } })}
                                     />
                                 </div>
                                 <div className="pure-control-group">
