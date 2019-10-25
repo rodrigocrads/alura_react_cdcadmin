@@ -3,6 +3,8 @@ import './App.css';
 import './css/pure-min.css';
 import './css/side-menu.css';
 
+import Input from '../src/components/input';
+
 import axios from 'axios';
 
 const URL = "http://localhost:8080/api/autores";
@@ -75,27 +77,30 @@ class App extends Component {
                     <div className="content" id="content">
                         <div className="pure-form pure-form-aligned">
                             <form className="pure-form pure-form-aligned" method="POST" onSubmit={(event) => this.enviarDadosForm(event)}>
-                                <div className="pure-control-group">
-                                    <label htmlFor="nome">Nome</label>
-                                    <input id="nome" type="text" name="nome"
-                                        value={form.nome}
-                                        onChange={(ev) => this.setState({ form: { ...form, nome: ev.target.value } })}
-                                    />
-                                </div>
-                                <div className="pure-control-group">
-                                    <label htmlFor="email">Email</label>
-                                    <input id="email" type="email" name="email"
-                                        value={form.email}
-                                        onChange={(ev) => this.setState({ form: { ...form, email: ev.target.value } })}
-                                    />
-                                </div>
-                                <div className="pure-control-group">
-                                    <label htmlFor="senha">Senha</label>
-                                    <input id="senha" type="password" name="senha"
-                                        value={form.senha}
-                                        onChange={(ev) => this.setState({ form: { ...form, senha: ev.target.value } })}
-                                    />
-                                </div>
+                                <Input label="Nome"
+                                    id="nome"
+                                    type="text"
+                                    name="nome"
+                                    value={form.nome}
+                                    onChange={(ev) => this.setState({ form: { ...form, nome: ev.target.value } })}
+                                />
+
+                                <Input label="Email"
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    value={form.email}
+                                    onChange={(ev) => this.setState({ form: { ...form, email: ev.target.value } })}
+                                />
+
+                                <Input label="Senha"
+                                    id="senha"
+                                    type="password"
+                                    name="senha"
+                                    value={form.senha}
+                                    onChange={(ev) => this.setState({ form: { ...form, senha: ev.target.value } })}
+                                />
+
                                 <div className="pure-control-group">
                                     <label></label>
                                     <button type="submit" className="pure-button pure-button-primary">Gravar</button>
