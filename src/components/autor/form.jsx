@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import Input from '../input';
 
 import axios from 'axios';
+import PubSub from 'pubsub-js';
 
 const URL = "http://localhost:8080/api/autores";
 
 class Form extends Component {
+
     constructor() {
         super();
 
@@ -21,13 +23,12 @@ class Form extends Component {
         ev.preventDefault();
 
         const headers = { 'Content-TYpe': 'application/json' };
-
         const autor = this.state;
 
         axios.post(URL, autor, headers)
             .then((resp) => {
                 const autores = resp.data;
-                this.props.atualizarAutores(autores);
+                PubSub.publish('atualizar-lista-autores', autores);
             })
             .catch((err) => console.log(err));
     }

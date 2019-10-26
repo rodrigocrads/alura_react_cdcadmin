@@ -4,10 +4,12 @@ import AutorForm from './form';
 import AutorTable from './table';
 
 import axios from 'axios';
+import PubSub from 'pubsub-js';
 
 const URL = "http://localhost:8080/api/autores";
 
 class Index extends Component {
+
     constructor() {
         super();
 
@@ -22,7 +24,12 @@ class Index extends Component {
                 const autores = resp.data;
                 this.setState({ autores });
             })
-            .catch(() => alert('Erro ao tentar carregar as informações dos autores!!!!'))
+            .catch(() => alert('Erro ao tentar carregar a lista dos autores da API!!!!'));
+        
+        PubSub.subscribe('atualizar-lista-autores', (topico, novosAutores) => {
+            console.log(`Foi chamado o tópico ${topico}!`);
+            this.setState({autores: novosAutores});
+        });
     }
 
     render() {
@@ -33,11 +40,8 @@ class Index extends Component {
                 </div>
 
                 <div className="content" id="content">
-
-                    <AutorForm atualizarAutores={autores => this.setState({autores})} />
-
+                    <AutorForm />
                     <AutorTable autores={this.state.autores} />
-
                 </div>
             </div>
         );
