@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Input from '../input';
+import TratadorErros from '../tratadorErros';
 
 import axios from 'axios';
 import PubSub from 'pubsub-js';
@@ -25,19 +26,31 @@ class Form extends Component {
         const headers = { 'Content-TYpe': 'application/json' };
         const autor = this.state;
 
+        PubSub.publish('limpar-msg-erros');
+
         axios.post(URL, autor, headers)
             .then((resp) => {
                 const autores = resp.data;
                 PubSub.publish('atualizar-lista-autores', autores);
+                this.setState({
+                    nome: "",
+                    email: "",
+                    senha: "",
+                });
             })
-            .catch((err) => console.log(err));
+            .catch((error) => { 
+                if(error.response.status === 400) {
+                   new TratadorErros().publicarErros(error.response.data); 
+                }
+            });
     }
 
     render() {
         return (
             <div className="pure-form pure-form-aligned">
                 <form className="pure-form pure-form-aligned" method="POST" onSubmit={(event) => this.enviarDadosForm(event)}>
-                    <Input label="Nome"
+                    <Input 
+                        label="Nome"
                         id="nome"
                         type="text"
                         name="nome"
@@ -45,7 +58,8 @@ class Form extends Component {
                         onChange={(ev) => this.setState({ nome: ev.target.value } )}
                     />
 
-                    <Input label="Email"
+                    <Input 
+                        label="Email"
                         id="email"
                         type="email"
                         name="email"
@@ -53,7 +67,8 @@ class Form extends Component {
                         onChange={(ev) => this.setState({ email: ev.target.value } )}
                     />
 
-                    <Input label="Senha"
+                    <Input 
+                        label="Senha"
                         id="senha"
                         type="password"
                         name="senha"
